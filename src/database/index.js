@@ -26,4 +26,25 @@ const boards = {
   }
 };
 
-module.exports = { users, boards };
+const tasks = {
+  '123123': {
+    id: '123123',
+    title: 'Task1',
+    order: 0,
+    description: 'Do smth',
+    userId: '34563456',
+    boardId: '45363456',
+    columnId: '23452345'
+  },
+  '345345': {
+    id: '345345',
+    title: 'Task1',
+    order: 1,
+    description: 'Do smth',
+    userId: '34563456',
+    boardId: '45363456',
+    columnId: '23452345'
+  }
+};
+
+module.exports = { users, boards, tasks };

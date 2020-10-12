@@ -1,4 +1,4 @@
-const { boards } = require('../../database');
+const { boards, tasks } = require('../../database');
 
 const getAll = async () => {
   return [...Object.values(boards)];
@@ -35,6 +35,13 @@ const deleteBoard = async id => {
 
   if (board) {
     delete boards[id];
+
+    for (const task in tasks) {
+      if (tasks[task].boardId === id) {
+        delete tasks[task];
+      }
+    }
+
     return board;
   }
   return undefined;

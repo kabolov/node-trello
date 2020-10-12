@@ -1,4 +1,4 @@
-const { users } = require('../../database');
+const { users, tasks } = require('../../database');
 
 const getAll = async () => {
   return [...Object.values(users)];
@@ -35,6 +35,11 @@ const deleteUser = async id => {
 
   if (user) {
     delete users[id];
+    for (const task in tasks) {
+      if (tasks[task].userId === id) {
+        tasks[task].userId = null;
+      }
+    }
     return user;
   }
   return undefined;
