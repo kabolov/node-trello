@@ -1,8 +1,6 @@
 const { users } = require('../../database');
 
 const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
-
   return [...Object.values(users)];
 };
 
@@ -15,6 +13,7 @@ const getById = async id => {
 const createUser = async user => {
   if (user) {
     users[user.id] = user;
+
     return user;
   }
   return undefined;
@@ -33,6 +32,7 @@ const updateUser = async (id, newUser) => {
 
 const deleteUser = async id => {
   const user = users[id];
+
   if (user) {
     delete users[id];
     return user;

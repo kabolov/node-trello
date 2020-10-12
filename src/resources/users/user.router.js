@@ -17,7 +17,7 @@ router.route('/:id').get(async (req, res) => {
   if (user) {
     res.json(User.toResponse(user));
   } else {
-    res.json('No users found');
+    res.status(404).json('No users found');
   }
 });
 
@@ -51,7 +51,7 @@ router.route('/:id').put(async (req, res) => {
   if (result) {
     res.json({ ...User.toResponse(result), success: 'true' });
   } else {
-    res.json('No user found');
+    res.status(404).json('No user found');
   }
 });
 
@@ -64,7 +64,7 @@ router.route('/:id').delete(async (req, res) => {
   if (result) {
     res.json({ ...User.toResponse(result), success: 'true' });
   } else {
-    res.json('No user found');
+    res.status(400).json('No user found');
   }
 });
 
