@@ -20,4 +20,23 @@ const configure = () => {
     });
 };
 
-module.exports = configure;
+const handleErrors = (err, res) => {
+  const { statusCode, result } = err;
+
+  if (statusCode) {
+    res.status(statusCode).json(result);
+  } else {
+    console.error('Internal Server Error');
+
+    res.status(500);
+    res.render('error', { error: err });
+  }
+};
+
+const logIncomingRequest = () => {
+  return morgan(
+    '+++++++++++++++++++++++++++++++++++++++++++++++ \n :url \n :params \n :body \n +++++++++++++++++++++++++++++++++++++++++++++++++ \n'
+  );
+};
+
+module.exports = { configure, handleErrors, logIncomingRequest };

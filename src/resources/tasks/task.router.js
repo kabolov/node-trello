@@ -35,15 +35,6 @@ router.route('/').post(async (req, res, next) => {
   try {
     const { boardId } = req.params;
     const { title, order, description, userId, columnId } = req.body;
-    console.dir(req.body);
-    console.dir({
-      boardId,
-      title,
-      order,
-      description,
-      userId,
-      columnId
-    });
 
     if (!boardId) {
       res.status(400).json('please pass all required fields');
