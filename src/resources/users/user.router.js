@@ -8,7 +8,7 @@ router.route('/').get(async (req, res, next) => {
     const users = await usersService.getAll();
     // map user fields to exclude secret fields like "password"
     // throw new Error({ statusCode: 400, result: 'Something got wrong!' });
-    res.json(users.map(User.toResponse));
+    res.json(users);
   } catch (error) {
     return next(error);
   }
@@ -20,8 +20,9 @@ router.route('/:id').get(async (req, res, next) => {
     const { id } = req.params;
 
     const user = await usersService.getById(id);
+
     if (user) {
-      res.json(User.toResponse(user));
+      res.json(user);
     } else {
       res.status(404).json('No users found');
     }
@@ -40,12 +41,12 @@ router.route('/').post(async (req, res, next) => {
       return;
     }
 
-    const user = await usersService.createUser(
-      new User({ name, login, password })
-    );
+    const user = await usersService.createUser({ name, login, password });
+    const userObject = user.toObject();
+    delete userObject.password;
 
     if (user) {
-      res.json({ ...User.toResponse(user), success: true });
+      res.json(userObject);
     } else {
       res.status(400).json('error');
     }

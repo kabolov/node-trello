@@ -1,32 +1,25 @@
 const { users, tasks } = require('../../database');
+const { User } = require('./user.model');
 
 const getAll = async () => {
-  return [...Object.values(users)];
+  return await User.find();
 };
 
 const getById = async id => {
-  const user = users[id];
-
-  return user;
+  const user = await User.findOne({ id });
+  return user.toObject();
 };
 
 const createUser = async user => {
   if (user) {
-    users[user.id] = user;
-
-    return user;
+    return await User.create(user);
   }
   return undefined;
 };
 
 const updateUser = async (id, newUser) => {
   if (id && newUser) {
-    const oldUser = users[id];
-    if (oldUser) {
-      users[id] = { ...oldUser, ...newUser };
-      return users[id];
-    }
-    return undefined;
+    return (await User.update({ id }, { ...newUser })).toObject();
   }
 };
 
