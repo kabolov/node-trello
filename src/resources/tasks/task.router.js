@@ -1,5 +1,4 @@
 const router = require('express').Router({ mergeParams: true });
-const Task = require('./task.model');
 const taskService = require('./task.service');
 
 // get all tasks
@@ -41,9 +40,14 @@ router.route('/').post(async (req, res, next) => {
       return;
     }
 
-    const task = await taskService.createTask(
-      new Task({ title, order, description, userId, boardId, columnId })
-    );
+    const task = await taskService.createTask({
+      title,
+      order,
+      description,
+      userId,
+      boardId,
+      columnId
+    });
 
     if (task) {
       res.json(task);

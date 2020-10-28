@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const Board = require('./board.model');
 const boardsService = require('./board.service');
 
 // get all boards
@@ -40,9 +39,7 @@ router.route('/').post(async (req, res, next) => {
       return;
     }
 
-    const board = await boardsService.createBoard(
-      new Board({ title, columns })
-    );
+    const board = await boardsService.createBoard({ title, columns });
 
     if (board) {
       res.json(board);

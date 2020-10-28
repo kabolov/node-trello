@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const User = require('./user.model');
 const usersService = require('./user.service');
 
 // get all users
@@ -63,11 +62,8 @@ router.route('/:id').put(async (req, res, next) => {
 
     const result = await usersService.updateUser(id, newUser);
 
-    if (result) {
-      res.json({ ...User.toResponse(result), success: 'true' });
-    } else {
-      res.status(404).json('No user found');
-    }
+    if (result) res.json({ success: true });
+    res.status(404).json('No user found');
   } catch (error) {
     return next(error);
   }
@@ -78,13 +74,9 @@ router.route('/:id').delete(async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const result = await usersService.deleteUser(id);
-
-    if (result) {
-      res.json({ ...User.toResponse(result), success: 'true' });
-    } else {
-      res.status(400).json('No user found');
-    }
+    await usersService.deleteUser(id);
+    res.json({ success: 'true' });
+    // res.status(400).json('No user found');
   } catch (error) {
     return next(error);
   }

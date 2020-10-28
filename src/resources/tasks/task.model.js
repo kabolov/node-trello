@@ -1,23 +1,30 @@
 const uuid = require('uuid');
+const mongoose = require('mongoose');
 
-class Task {
-  constructor({
-    id = uuid(),
-    title,
-    order,
-    description,
-    userId,
-    boardId,
-    columnId
-  }) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-    this.description = description;
-    this.userId = userId;
-    this.boardId = boardId;
-    this.columnId = columnId;
-  }
-}
+const TaskSchema = new mongoose.Schema(
+  {
+    id: { type: String, default: uuid },
+    title: {
+      type: String,
+      required: true
+    },
+    order: Number,
+    description: String,
+    userId: {
+      type: String,
+      default: uuid,
+      ref: 'User'
+    },
+    boardId: {
+      type: String,
+      default: uuid,
+      ref: 'Board'
+    },
+    columnId: String
+  },
+  { versionKey: false }
+);
+
+const Task = mongoose.model('Task', TaskSchema);
 
 module.exports = Task;

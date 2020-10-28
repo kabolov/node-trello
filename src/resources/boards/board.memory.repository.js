@@ -1,50 +1,32 @@
-const { boards, tasks } = require('../../database');
+const Board = require('./board.model');
+const Task = require('../tasks/task.model');
 
 const getAll = async () => {
-  return [...Object.values(boards)];
+  return Board.find();
 };
 
 const getById = async id => {
-  const board = boards[id];
-
-  return board;
+  return Board.findOne({ id });
 };
 
 const createBoard = async board => {
   if (board) {
-    boards[board.id] = board;
-
-    return board;
+    return Board.create(board);
   }
   return undefined;
 };
 
 const updateBoard = async (id, newBoard) => {
-  if (id && newBoard) {
-    const oldBoard = boards[id];
-    if (oldBoard) {
-      boards[id] = { ...oldBoard, ...newBoard };
-      return boards[id];
-    }
-    return undefined;
-  }
+  const board = await Board.findOne({ id });
+
+  if (board) return Board.updateOne({ id }, newBoard);
+  return false;
 };
 
 const deleteBoard = async id => {
-  const board = boards[id];
+  await Task.remove({ boardId: id });
 
-  if (board) {
-    delete boards[id];
-
-    for (const task in tasks) {
-      if (tasks[task].boardId === id) {
-        delete tasks[task];
-      }
-    }
-
-    return board;
-  }
-  return undefined;
+  return Board.deleteOne({ id });
 };
 
 module.exports = { getAll, getById, createBoard, updateBoard, deleteBoard };

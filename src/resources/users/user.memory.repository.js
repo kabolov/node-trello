@@ -1,41 +1,32 @@
-const { users, tasks } = require('../../database');
 const { User } = require('./user.model');
+const Task = require('../tasks/task.model');
 
 const getAll = async () => {
-  return await User.find();
+  return User.find();
 };
 
 const getById = async id => {
-  const user = await User.findOne({ id });
-  return user.toObject();
+  return User.findOne({ id });
 };
 
 const createUser = async user => {
   if (user) {
-    return await User.create(user);
+    return User.create(user);
   }
   return undefined;
 };
 
 const updateUser = async (id, newUser) => {
-  if (id && newUser) {
-    return (await User.update({ id }, { ...newUser })).toObject();
-  }
+  const user = await User.findOne({ id });
+
+  if (user) return User.updateOne({ id }, newUser);
+  return false;
 };
 
 const deleteUser = async id => {
-  const user = users[id];
+  await Task.updateMany({ userId: id }, { userId: null });
 
-  if (user) {
-    delete users[id];
-    for (const task in tasks) {
-      if (tasks[task].userId === id) {
-        tasks[task].userId = null;
-      }
-    }
-    return user;
-  }
-  return undefined;
+  return User.deleteOne({ id });
 };
 
 module.exports = { getAll, getById, createUser, deleteUser, updateUser };

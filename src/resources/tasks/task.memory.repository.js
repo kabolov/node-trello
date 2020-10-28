@@ -1,45 +1,30 @@
-const { tasks } = require('../../database');
+const Task = require('./task.model');
 
 const getAll = async () => {
-  return [...Object.values(tasks)];
+  return Task.find();
 };
 
 // ? how to use boardId here?? Why???
 const getById = async id => {
-  const task = tasks[id];
-  //   if (task.boardId === boardId) {
-  return task;
-  //   }
+  return Task.findOne({ id });
 };
 
 const createTask = async task => {
   if (task) {
-    tasks[task.id] = task;
-
-    return task;
+    return Task.create(task);
   }
   return undefined;
 };
 
 const updateTask = async (id, newTask) => {
-  if (id && newTask) {
-    const oldTask = tasks[id];
-    if (oldTask) {
-      tasks[id] = { ...oldTask, ...newTask };
-      return tasks[id];
-    }
-    return undefined;
-  }
+  const task = await Task.findOne({ id });
+
+  if (task) return Task.updateOne({ id }, newTask);
+  return false;
 };
 
 const deleteTask = async id => {
-  const task = tasks[id];
-
-  if (task) {
-    delete tasks[id];
-    return task;
-  }
-  return undefined;
+  return Task.deleteOne({ id });
 };
 
 module.exports = { getAll, getById, createTask, updateTask, deleteTask };
