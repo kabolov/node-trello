@@ -9,6 +9,10 @@ const getById = async id => {
   return User.findOne({ id });
 };
 
+const getByLogin = async login => {
+  return User.findOne({ login });
+};
+
 const createUser = async user => {
   if (user) {
     return User.create(user);
@@ -29,4 +33,11 @@ const deleteUser = async id => {
   return User.deleteOne({ id });
 };
 
-module.exports = { getAll, getById, createUser, deleteUser, updateUser };
+module.exports = {
+  getAll,
+  getById,
+  getByLogin,
+  createUser,
+  deleteUser,
+  updateUser
+};

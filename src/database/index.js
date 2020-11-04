@@ -1,15 +1,12 @@
 const mongoose = require('mongoose');
 const { MONGO_CONNECTION_STRING } = require('../common/config');
-const { User } = require('../resources/users/user.model');
+const { createUser } = require('../resources/users/user.memory.repository');
 
-const initialUsers = [
-  new User({ name: 'Alex', login: 'alex123', password: 'adgweiudjfgsjdhf' }),
-  new User({
-    name: 'Sasha',
-    login: 'sasha123',
-    password: 'asodhaisdqdehfshf23823'
-  })
-];
+const initialUser = {
+  name: 'admin',
+  login: 'admin',
+  password: 'admin'
+};
 
 const connectToDb = callback => {
   mongoose.connect(MONGO_CONNECTION_STRING, {
@@ -22,12 +19,12 @@ const connectToDb = callback => {
     .on('error', () => {
       console.error('Error while connecting to database');
     })
-    .once('open', () => {
+    .once('open', async () => {
       console.log('Connected to database');
       database.dropDatabase(err => {
         if (!err) console.log('database dropped');
       });
-      User.insertMany(initialUsers);
+      await createUser(initialUser);
       callback();
     });
 };
